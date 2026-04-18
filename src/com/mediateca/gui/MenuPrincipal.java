@@ -115,9 +115,15 @@ public class MenuPrincipal extends JFrame {
 
     private void mostrarVistaFormulario(String tipo) {
         JPanel vistaForm = new JPanel(new BorderLayout());
+
+        JPanel panelTop = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton btnVolver = new JButton("<< Volver a selección de material");
+        btnVolver.setFocusPainted(false);
+        btnVolver.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnVolver.addActionListener(e -> navegadorAgregar.show(panelAgregarContenedor, "MENU_BOTONES"));
-        vistaForm.add(btnVolver, BorderLayout.NORTH);
+        panelTop.add(btnVolver);
+
+        vistaForm.add(panelTop, BorderLayout.NORTH);
 
         JPanel cuerpoFormulario = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -128,11 +134,11 @@ public class MenuPrincipal extends JFrame {
         if (tipo.equals("LIBRO")) {
             etiquetas = new String[]{"Código:", "Título:", "Autor:", "Páginas:", "Editorial:", "ISBN:", "Año:", "Unidades:"};
         } else if (tipo.equals("REVISTA")) {
-            etiquetas = new String[]{"Código:", "Título:", "Editorial:", "Periodicidad:", "Fecha Pub (Ej: 2020 o AAAA-MM-DD):", "Unidades:"};
+            etiquetas = new String[]{"Código:", "Título:", "Editorial:", "Periodicidad:", "Fecha Pub (a-m-d):", "Unidades:"};
         } else if (tipo.equals("CD")) {
-            etiquetas = new String[]{"Código:", "Título:", "Artista:", "Género:", "Duración (HH:MM:SS):", "Canciones:", "Unidades:"};
+            etiquetas = new String[]{"Código:", "Título:", "Artista:", "Género:", "Duración (m:h:s):", "Canciones:", "Unidades:"};
         } else {
-            etiquetas = new String[]{"Código:", "Título:", "Director:", "Duración (HH:MM:SS):", "Género:", "Unidades:"};
+            etiquetas = new String[]{"Código:", "Título:", "Director:", "Duración (m:h:s):", "Género:", "Unidades:"};
         }
 
         JTextField[] campos = new JTextField[etiquetas.length];
@@ -199,12 +205,11 @@ public class MenuPrincipal extends JFrame {
         panelBusqueda.add(btnBuscar);
 
         JPanel panelFormulario = new JPanel(new GridBagLayout());
-        panelFormulario.setBorder(BorderFactory.createTitledBorder("Datos del Material (Edite y Guarde)"));
+        panelFormulario.setBorder(BorderFactory.createTitledBorder(""));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // 7 campos genéricos para acomodar cualquier material
         String[] etiquetas = {"Título:", "Autor / Director / Artista:", "Editorial / Género:", "Páginas / Duración:", "ISBN / Periodicidad / Canciones:", "Año / Fecha Publicación:", "Unidades Disponibles:"};
         JTextField[] camposMod = new JTextField[7];
         for (int i = 0; i < etiquetas.length; i++) {
@@ -222,7 +227,6 @@ public class MenuPrincipal extends JFrame {
         panelPrincipal.add(panelFormulario, BorderLayout.CENTER);
         panelPrincipal.add(panelBoton, BorderLayout.SOUTH);
 
-        // Variables invisibles para guardar la memoria de lo que buscamos
         final Object[] materialEncontrado = {null};
         final String[] tipoActual = {""};
 
@@ -327,17 +331,12 @@ public class MenuPrincipal extends JFrame {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 50));
 
         JLabel lblTitulo = new JLabel("Código del Material:");
-        lblTitulo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         panel.add(lblTitulo);
 
         JTextField txtCod = new JTextField(15);
-        txtCod.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         panel.add(txtCod);
 
         JButton btnDel = new JButton("Eliminar Material");
-        btnDel.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        btnDel.setForeground(new Color(220, 53, 69));
-        btnDel.setBackground(Color.WHITE);
         btnDel.setFocusPainted(false);
         btnDel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
