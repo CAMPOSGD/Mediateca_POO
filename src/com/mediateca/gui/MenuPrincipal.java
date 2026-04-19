@@ -339,27 +339,59 @@ public class MenuPrincipal extends JFrame {
         JButton btnDel = new JButton("Eliminar Material");
         btnDel.setFocusPainted(false);
         btnDel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
         panel.add(btnDel);
 
         btnDel.addActionListener(e -> {
-            String codigo = txtCod.getText().trim();
+            String codigo = txtCod.getText().trim().toUpperCase();
 
             if (codigo.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Por favor ingrese un código primero.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "Por favor ingrese un código primero.",
+                        "Aviso",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            int r = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea borrar permanentemente el material " + codigo + "?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            int r = JOptionPane.showConfirmDialog(this,
+                    "¿Está seguro que desea borrar permanentemente el material " + codigo + "?",
+                    "Confirmar Eliminación",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+
             if (r == JOptionPane.YES_OPTION) {
-                if (new Crud_Libro().eliminarLibro(codigo)) {
-                    JOptionPane.showMessageDialog(this, "Material eliminado con éxito.", "Hecho", JOptionPane.INFORMATION_MESSAGE);
+                boolean eliminado = false;
+
+                if (codigo.startsWith("LIB")) {
+                    eliminado = new Crud_Libro().eliminarLibro(codigo);
+                } else if (codigo.startsWith("REV")) {
+                    eliminado = new Crud_Revista().eliminarRevista(codigo);
+                } else if (codigo.startsWith("CDA")) {
+                    eliminado = new Crud_CDAudio().eliminarCD(codigo);
+                } else if (codigo.startsWith("DVD")) {
+                    eliminado = new Crud_DVD().eliminarDVD(codigo);
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "El código no tiene un formato válido.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (eliminado) {
+                    JOptionPane.showMessageDialog(this,
+                            "Material eliminado con éxito.",
+                            "Hecho",
+                            JOptionPane.INFORMATION_MESSAGE);
                     txtCod.setText("");
                 } else {
-                    JOptionPane.showMessageDialog(this, "No se pudo eliminar. Verifique que el código exista.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this,
+                            "No se pudo eliminar. Verifique que el código exista.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
+
         return panel;
     }
 
